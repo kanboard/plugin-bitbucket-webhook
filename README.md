@@ -1,6 +1,8 @@
 Bitbucket Webhook
 =================
 
+[![Build Status](https://travis-ci.org/kanboard/plugin-bitbucket-webhook.svg?branch=master)](https://travis-ci.org/kanboard/plugin-bitbucket-webhook)
+
 Bind Bitbucket webhook events to Kanboard automatic actions.
 
 Author
