@@ -12,12 +12,12 @@ class Plugin extends Base
         $this->on('app.bootstrap', function($container) {
             Translator::load($container['config']->getCurrentLanguage(), __DIR__.'/Locale');
 
-            $this->eventManager->register(WebhookHandler::EVENT_COMMIT, t('Bitbucket commit received'));
-            $this->eventManager->register(WebhookHandler::EVENT_ISSUE_OPENED, t('Bitbucket issue opened'));
-            $this->eventManager->register(WebhookHandler::EVENT_ISSUE_CLOSED, t('Bitbucket issue closed'));
-            $this->eventManager->register(WebhookHandler::EVENT_ISSUE_REOPENED, t('Bitbucket issue reopened'));
-            $this->eventManager->register(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE, t('Bitbucket issue assignee change'));
-            $this->eventManager->register(WebhookHandler::EVENT_ISSUE_COMMENT, t('Bitbucket issue comment created'));
+            $container['eventManager']->register(WebhookHandler::EVENT_COMMIT, t('Bitbucket commit received'));
+            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_OPENED, t('Bitbucket issue opened'));
+            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_CLOSED, t('Bitbucket issue closed'));
+            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_REOPENED, t('Bitbucket issue reopened'));
+            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE, t('Bitbucket issue assignee change'));
+            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_COMMENT, t('Bitbucket issue comment created'));
         });
 
         $this->actionManager->getAction('\Kanboard\Action\CommentCreation')->addEvent(WebhookHandler::EVENT_ISSUE_COMMENT);
