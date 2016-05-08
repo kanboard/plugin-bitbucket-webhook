@@ -9,17 +9,6 @@ class Plugin extends Base
 {
     public function initialize()
     {
-        $this->on('app.bootstrap', function($container) {
-            Translator::load($container['config']->getCurrentLanguage(), __DIR__.'/Locale');
-
-            $container['eventManager']->register(WebhookHandler::EVENT_COMMIT, t('Bitbucket commit received'));
-            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_OPENED, t('Bitbucket issue opened'));
-            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_CLOSED, t('Bitbucket issue closed'));
-            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_REOPENED, t('Bitbucket issue reopened'));
-            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE, t('Bitbucket issue assignee change'));
-            $container['eventManager']->register(WebhookHandler::EVENT_ISSUE_COMMENT, t('Bitbucket issue comment created'));
-        });
-
         $this->actionManager->getAction('\Kanboard\Action\CommentCreation')->addEvent(WebhookHandler::EVENT_ISSUE_COMMENT);
         $this->actionManager->getAction('\Kanboard\Action\CommentCreation')->addEvent(WebhookHandler::EVENT_COMMIT);
         $this->actionManager->getAction('\Kanboard\Action\TaskAssignUser')->addEvent(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE);
@@ -29,8 +18,19 @@ class Plugin extends Base
         $this->actionManager->getAction('\Kanboard\Action\TaskOpen')->addEvent(WebhookHandler::EVENT_ISSUE_REOPENED);
 
         $this->template->hook->attach('template:project:integrations', 'BitbucketWebhook:project/integrations');
-
         $this->route->addRoute('/webhook/bitbucket/:project_id/:token', 'webhook', 'handler', 'BitbucketWebhook');
+    }
+
+    public function onStartup()
+    {
+        Translator::load($this->language->getCurrentLanguage(), __DIR__.'/Locale');
+
+        $this->eventManager->register(WebhookHandler::EVENT_COMMIT, t('Bitbucket commit received'));
+        $this->eventManager->register(WebhookHandler::EVENT_ISSUE_OPENED, t('Bitbucket issue opened'));
+        $this->eventManager->register(WebhookHandler::EVENT_ISSUE_CLOSED, t('Bitbucket issue closed'));
+        $this->eventManager->register(WebhookHandler::EVENT_ISSUE_REOPENED, t('Bitbucket issue reopened'));
+        $this->eventManager->register(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE, t('Bitbucket issue assignee change'));
+        $this->eventManager->register(WebhookHandler::EVENT_ISSUE_COMMENT, t('Bitbucket issue comment created'));
     }
 
     public function getPluginName()
@@ -50,7 +50,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '1.0.1';
+        return '1.0.2';
     }
 
     public function getPluginHomepage()

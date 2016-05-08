@@ -48,7 +48,7 @@ Documentation
 
 ### Configuration
 
-![Bitbucket configuration](http://kanboard.net/screenshots/documentation/bitbucket-webhooks.png)
+![Bitbucket configuration](https://kanboard.net/screenshots/documentation/bitbucket-webhooks.png)
 
 1. On Kanboard, go to the project settings and choose the section **Integrations**
 2. Copy the Bitbucket webhook URL
