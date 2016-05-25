@@ -2,7 +2,7 @@
 
 namespace Kanboard\Plugin\BitbucketWebhook\Controller;
 
-use Kanboard\Controller\Base;
+use Kanboard\Controller\BaseController;
 use Kanboard\Plugin\BitbucketWebhook\WebhookHandler;
 
 /**
@@ -11,7 +11,7 @@ use Kanboard\Plugin\BitbucketWebhook\WebhookHandler;
  * @package  controller
  * @author   Frederic Guillot
  */
-class Webhook extends Base
+class WebhookController extends BaseController
 {
     /**
      * Handle Bitbucket webhooks
@@ -30,6 +30,6 @@ class Webhook extends Base
             $this->request->getJson()
         );
 
-        echo $result ? 'PARSED' : 'IGNORED';
+        $this->response->text($result ? 'PARSED' : 'IGNORED');
     }
 }

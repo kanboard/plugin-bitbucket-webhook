@@ -18,7 +18,7 @@ class Plugin extends Base
         $this->actionManager->getAction('\Kanboard\Action\TaskOpen')->addEvent(WebhookHandler::EVENT_ISSUE_REOPENED);
 
         $this->template->hook->attach('template:project:integrations', 'BitbucketWebhook:project/integrations');
-        $this->route->addRoute('/webhook/bitbucket/:project_id/:token', 'webhook', 'handler', 'BitbucketWebhook');
+        $this->route->addRoute('/webhook/bitbucket/:project_id/:token', 'WebhookController', 'handler', 'BitbucketWebhook');
     }
 
     public function onStartup()
@@ -50,7 +50,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '1.0.2';
+        return '1.0.3';
     }
 
     public function getPluginHomepage()
