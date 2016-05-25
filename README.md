@@ -19,12 +19,13 @@ Requirements
 Installation
 ------------
 
-- Decompress the archive in the `plugins` folder
+You have the choice between 3 methods:
 
-or
+1. Install the plugin from the Kanboard plugin manager with one click
+2. Download the zip file and decompress everything under the directory `plugins/BitbucketWebhook`
+3. Clone this repository into the folder `plugins/BitbucketWebhook`
 
-- Create a folder **plugins/BitbucketWebhook**
-- Copy all files under this directory
+Note: Plugin folder is case-sensitive.
 
 Documentation
 -------------
