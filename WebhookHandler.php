@@ -76,12 +76,12 @@ class WebhookHandler extends Base
      */
     public function handleCommentCreated(array $payload)
     {
-        $task = $this->taskFinder->getByReference($this->project_id, $payload['issue']['id']);
+        $task = $this->taskFinderModel->getByReference($this->project_id, $payload['issue']['id']);
 
         if (! empty($task)) {
-            $user = $this->user->getByUsername($payload['actor']['username']);
+            $user = $this->userModel->getByUsername($payload['actor']['username']);
 
-            if (! empty($user) && ! $this->projectPermission->isAssignable($this->project_id, $user['id'])) {
+            if (! empty($user) && ! $this->projectPermissionModel->isAssignable($this->project_id, $user['id'])) {
                 $user = array();
             }
 
@@ -137,7 +137,7 @@ class WebhookHandler extends Base
      */
     public function handleIssueUpdated(array $payload)
     {
-        $task = $this->taskFinder->getByReference($this->project_id, $payload['issue']['id']);
+        $task = $this->taskFinderModel->getByReference($this->project_id, $payload['issue']['id']);
 
         if (empty($task)) {
             return false;
@@ -207,13 +207,13 @@ class WebhookHandler extends Base
      */
     public function handleIssueAssigned(array $task, array $payload)
     {
-        $user = $this->user->getByUsername($payload['issue']['assignee']['username']);
+        $user = $this->userModel->getByUsername($payload['issue']['assignee']['username']);
 
         if (empty($user)) {
             return false;
         }
 
-        if (! $this->projectPermission->isAssignable($this->project_id, $user['id'])) {
+        if (! $this->projectPermissionModel->isAssignable($this->project_id, $user['id'])) {
             return false;
         }
 
@@ -281,13 +281,13 @@ class WebhookHandler extends Base
      */
     public function handleCommit(array $commit, array $actor)
     {
-        $task_id = $this->task->getTaskIdFromText($commit['message']);
+        $task_id = $this->taskModel->getTaskIdFromText($commit['message']);
 
         if (empty($task_id)) {
             return false;
         }
 
-        $task = $this->taskFinder->getById($task_id);
+        $task = $this->taskFinderModel->getById($task_id);
 
         if (empty($task)) {
             return false;

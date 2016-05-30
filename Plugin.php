@@ -23,7 +23,7 @@ class Plugin extends Base
 
     public function onStartup()
     {
-        Translator::load($this->language->getCurrentLanguage(), __DIR__.'/Locale');
+        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__.'/Locale');
 
         $this->eventManager->register(WebhookHandler::EVENT_COMMIT, t('Bitbucket commit received'));
         $this->eventManager->register(WebhookHandler::EVENT_ISSUE_OPENED, t('Bitbucket issue opened'));

@@ -3,11 +3,11 @@
 require_once 'tests/units/Base.php';
 
 use Kanboard\Plugin\BitbucketWebhook\WebhookHandler;
-use Kanboard\Model\TaskCreation;
-use Kanboard\Model\TaskFinder;
-use Kanboard\Model\Project;
-use Kanboard\Model\ProjectUserRole;
-use Kanboard\Model\User;
+use Kanboard\Model\TaskCreationModel;
+use Kanboard\Model\TaskFinderModel;
+use Kanboard\Model\ProjectModel;
+use Kanboard\Model\ProjectUserRoleModel;
+use Kanboard\Model\UserModel;
 use Kanboard\Core\Security\Role;
 
 class WebhookHandlerTest extends Base
@@ -16,8 +16,8 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_COMMIT, array($this, 'onCommit'));
 
-        $tc = new TaskCreation($this->container);
-        $p = new Project($this->container);
+        $tc = new TaskCreationModel($this->container);
+        $p = new ProjectModel($this->container);
         $bw = new WebhookHandler($this->container);
         $payload = json_decode(file_get_contents(__DIR__.'/fixtures/bitbucket_push.json'), true);
 
@@ -43,7 +43,7 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_OPENED, array($this, 'onIssueOpened'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
         $bw = new WebhookHandler($this->container);
@@ -59,10 +59,10 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_COMMENT, array($this, 'onCommentCreatedWithNoUser'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 1, 'project_id' => 1)));
 
         $g = new WebhookHandler($this->container);
@@ -78,13 +78,13 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_COMMENT, array($this, 'onCommentCreatedWithNotMember'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 1, 'project_id' => 1)));
 
-        $u = new User($this->container);
+        $u = new UserModel($this->container);
         $this->assertEquals(2, $u->create(array('username' => 'fguillot')));
 
         $g = new WebhookHandler($this->container);
@@ -100,16 +100,16 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_COMMENT, array($this, 'onCommentCreatedWithUser'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 1, 'project_id' => 1)));
 
-        $u = new User($this->container);
+        $u = new UserModel($this->container);
         $this->assertEquals(2, $u->create(array('username' => 'minicoders')));
 
-        $pp = new ProjectUserRole($this->container);
+        $pp = new ProjectUserRoleModel($this->container);
         $this->assertTrue($pp->addUser(1, 2, Role::PROJECT_MEMBER));
 
         $g = new WebhookHandler($this->container);
@@ -125,10 +125,10 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_CLOSED, array($this, 'onIssueClosed'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 1, 'project_id' => 1)));
 
         $g = new WebhookHandler($this->container);
@@ -144,10 +144,10 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_CLOSED, array($this, 'onIssueClosed'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 42, 'project_id' => 1)));
 
         $g = new WebhookHandler($this->container);
@@ -165,10 +165,10 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_REOPENED, array($this, 'onIssueReopened'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 1, 'project_id' => 1)));
 
         $g = new WebhookHandler($this->container);
@@ -184,10 +184,10 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_REOPENED, array($this, 'onIssueReopened'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 42, 'project_id' => 1)));
 
         $g = new WebhookHandler($this->container);
@@ -205,10 +205,10 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE, array($this, 'onIssueUnassigned'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 1, 'project_id' => 1)));
 
         $g = new WebhookHandler($this->container);
@@ -224,16 +224,16 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE, array($this, 'onIssueAssigned'));
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 1, 'project_id' => 1)));
 
-        $u = new User($this->container);
+        $u = new UserModel($this->container);
         $this->assertEquals(2, $u->create(array('username' => 'minicoders')));
 
-        $pp = new ProjectUserRole($this->container);
+        $pp = new ProjectUserRoleModel($this->container);
         $this->assertTrue($pp->addUser(1, 2, Role::PROJECT_MEMBER));
 
         $g = new WebhookHandler($this->container);
@@ -251,13 +251,13 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE, function () {});
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 1, 'project_id' => 1)));
 
-        $u = new User($this->container);
+        $u = new UserModel($this->container);
         $this->assertEquals(2, $u->create(array('username' => 'minicoders')));
 
         $g = new WebhookHandler($this->container);
@@ -275,10 +275,10 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE, function () {});
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 1, 'project_id' => 1)));
 
         $g = new WebhookHandler($this->container);
@@ -296,10 +296,10 @@ class WebhookHandlerTest extends Base
     {
         $this->container['dispatcher']->addListener(WebhookHandler::EVENT_ISSUE_ASSIGNEE_CHANGE, function () {});
 
-        $p = new Project($this->container);
+        $p = new ProjectModel($this->container);
         $this->assertEquals(1, $p->create(array('name' => 'foobar')));
 
-        $tc = new TaskCreation($this->container);
+        $tc = new TaskCreationModel($this->container);
         $this->assertEquals(1, $tc->create(array('title' => 'boo', 'reference' => 43, 'project_id' => 1)));
 
         $g = new WebhookHandler($this->container);
