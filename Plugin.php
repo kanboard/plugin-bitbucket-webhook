@@ -3,6 +3,7 @@
 namespace Kanboard\Plugin\BitbucketWebhook;
 
 use Kanboard\Core\Plugin\Base;
+use Kanboard\Core\Security\Role;
 use Kanboard\Core\Translator;
 
 class Plugin extends Base
@@ -19,6 +20,7 @@ class Plugin extends Base
 
         $this->template->hook->attach('template:project:integrations', 'BitbucketWebhook:project/integrations');
         $this->route->addRoute('/webhook/bitbucket/:project_id/:token', 'WebhookController', 'handler', 'BitbucketWebhook');
+        $this->applicationAccessMap->add('WebhookController', 'handler', Role::APP_PUBLIC);
     }
 
     public function onStartup()
