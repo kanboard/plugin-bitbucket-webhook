@@ -14,6 +14,7 @@ Author
 Requirements
 ------------
 
+- Kanboard >= 1.0.29
 - Bitbucket webhooks configured for a project
 
 Installation
