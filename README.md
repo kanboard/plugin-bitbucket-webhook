@@ -50,7 +50,7 @@ Documentation
 
 ### Configuration
 
-![Bitbucket configuration](https://kanboard.net/screenshots/documentation/bitbucket-webhooks.png)
+![Bitbucket configuration](https://cloud.githubusercontent.com/assets/323546/20451760/4441dee4-adcb-11e6-9f66-0987294cc5d7.png)
 
 1. On Kanboard, go to the project settings and choose the section **Integrations**
 2. Copy the Bitbucket webhook URL
@@ -58,6 +58,8 @@ Documentation
 4. Choose a title for your webhook and paste the Kanboard URL
 
 ### Examples
+
+You have to create some automatic actions in your project to make it work:
 
 #### Close a Kanboard task when a commit pushed to Bitbucket
 
