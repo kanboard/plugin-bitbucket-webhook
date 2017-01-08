@@ -15,5 +15,6 @@ class PluginTest extends Base
         $this->assertNotEmpty($plugin->getPluginAuthor());
         $this->assertNotEmpty($plugin->getPluginVersion());
         $this->assertNotEmpty($plugin->getPluginHomepage());
+        $this->assertNotEmpty($plugin->getCompatibleVersion());
     }
 }
